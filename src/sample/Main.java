@@ -1,15 +1,14 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -24,8 +23,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-//        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.setTitle("Transposer");
         primaryStage.setResizable(false);
 
         HBox topPane = new HBox();
@@ -37,24 +36,17 @@ public class Main extends Application {
         chordPane.setAlignment(Pos.TOP_LEFT);
         chordPane.setSpacing(5);
 
-        VBox intervalPane = new VBox();
-        intervalPane.setAlignment(Pos.TOP_LEFT);
-        intervalPane.setSpacing(5);
+        VBox settingsPane = new VBox();
+        settingsPane.setAlignment(Pos.TOP_LEFT);
+        settingsPane.setSpacing(5);
 
         HBox buttonPane = new HBox();
         buttonPane.setAlignment(Pos.TOP_LEFT);
         buttonPane.setSpacing(10);
 
-//        VBox buttonPane = new VBox();
-//        buttonPane.setAlignment(Pos.TOP_LEFT);
-
-//        GridPane intervalPane = new GridPane();
-//        intervalPane.setAlignment(Pos.TOP_LEFT);
-//        intervalPane.setHgap(10);
-//        intervalPane.setVgap(10);
-//        intervalPane.setPadding(new Insets(25, 25, 25, 25));
-
-        Font segoe = Font.font("Segoe UI", FontWeight.NORMAL, 12);
+        HBox radioPane = new HBox();
+        radioPane.setAlignment(Pos.TOP_LEFT);
+        radioPane.setSpacing(10);
 
         Label originalLabel = new Label("Original chords:");
 
@@ -80,20 +72,46 @@ public class Main extends Application {
 
         Button button = new Button("Transpose");
 
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        button.setOnAction(event -> {
 
-                try {
-                    transposedText.setText(Controller.transpose(originalText.getText(), Integer.parseInt(intervalText.getText())));
-                } catch (NumberFormatException e) {
-                    intervalError.setText("Interval must be a number!");
+            try {
+                intervalError.setText("");
+                int interval;
+                if (intervalText.getText().equals("")) {
+                    interval = 0;
+                } else {
+                    interval = Integer.parseInt(intervalText.getText());
+                }
+                transposedText.setText(Controller.transpose(originalText.getText(), interval));
+            } catch (NumberFormatException e) {
+                intervalError.setText("Interval must be a number!");
+            }
+        });
+
+        final ToggleGroup b_group = new ToggleGroup();
+
+        RadioButton rb_b = new RadioButton("B");
+        rb_b.setUserData("B");
+        rb_b.setToggleGroup(b_group);
+
+        RadioButton rb_h = new RadioButton("H");
+        rb_h.setUserData("H");
+        rb_h.setToggleGroup(b_group);
+        rb_h.setSelected(true);
+
+        b_group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if(b_group.getSelectedToggle().getUserData().equals("B")) {
+                    Transposer.setH(false);
+                } else {
+                    Transposer.setH(true);
                 }
             }
         });
 
         topPane.getChildren().add(chordPane);
-        topPane.getChildren().add(intervalPane);
+        topPane.getChildren().add(settingsPane);
         topPane.getChildren().add(buttonPane);
 
         chordPane.getChildren().add(originalLabel);
@@ -101,12 +119,16 @@ public class Main extends Application {
         chordPane.getChildren().add(transposedLabel);
         chordPane.getChildren().add(transposedText);
 
-        intervalPane.getChildren().add(intervalLabel);
-        intervalPane.getChildren().add(buttonPane);
-        intervalPane.getChildren().add(intervalError);
+        settingsPane.getChildren().add(intervalLabel);
+        settingsPane.getChildren().add(buttonPane);
+        settingsPane.getChildren().add(intervalError);
+        settingsPane.getChildren().add(radioPane);
 
         buttonPane.getChildren().add(intervalText);
         buttonPane.getChildren().add(button);
+
+        radioPane.getChildren().add(rb_b);
+        radioPane.getChildren().add(rb_h);
 
         primaryStage.setScene(new Scene(topPane/*, 300, 275*/));
         primaryStage.show();
@@ -114,12 +136,6 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-//        String[] words = Splitter.split("Cm D#7 B Emaj7 \n Bm");
-//        for (String string : words) {
-//            System.out.println(string);
-//        }
-//        System.out.println();
-//        System.out.println(Splitter.concat(words));
         launch(args);
     }
 }

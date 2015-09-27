@@ -24,9 +24,20 @@ public class Transposer {
         return ((value % 12) + 12) % 12;
     }
 
-    public static String transpose(String pitch, int interval) {
+    public static String transpose(String chord, int interval) {
+        String pitch;
+        String end;
+
+        if(chord.matches(".#(.*)")) {
+            pitch = chord.substring(0, 2);
+            end = chord.substring(2);
+        } else {
+            pitch = chord.substring(0, 1);
+            end = chord.substring(1);
+        }
+
         int value = getValue(pitch);
         value = transpose(value, interval);
-        return getPitch(value);
+        return getPitch(value) + end;
     }
 }

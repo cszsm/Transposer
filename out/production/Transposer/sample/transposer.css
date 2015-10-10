@@ -1,0 +1,90 @@
+.root {
+     -fx-background-color: rgb(42, 42, 42);
+     -fx-focus-color: transparent;
+}
+
+.label {
+    -fx-font-size: 16px;
+    -fx-text-fill: rgb(169, 183, 198);
+    -fx-font-family: 'Segoe UI Light';
+}
+
+.button {
+    -fx-background-color: rgb(72, 72, 72);
+    -fx-font-size: 12px;
+    -fx-text-fill: rgb(169, 183, 198);
+    -fx-font-family: 'Segoe UI';
+    -fx-background-radius: 0;
+}
+
+.button:hover {
+    -fx-background-color: rgb(96, 96, 96);
+}
+
+.button: pressed {
+    -fx-background-color: rgb(169, 183, 198);
+    -fx-text-fill: rgb(72, 72, 72);
+}
+
+.text-area {
+    -fx-background-color: rgb(96, 96, 96);
+    -fx-background-radius: 0;
+    -fx-text-fill: rgb(199, 208, 218);
+    -fx-highlight-fill: rgb(169, 183, 198);
+    -fx-faint-focus-color: transparent;
+}
+
+.text-area .content{
+    -fx-background-color: rgb(96, 96, 96);
+    -fx-background-radius: 0;
+}
+
+.text-field {
+    -fx-background-color: rgb(96, 96, 96);
+    -fx-background-radius: 0;
+    -fx-text-fill: rgb(199, 208, 218);
+    -fx-highlight-fill: rgb(169, 183, 198);
+}
+
+.radio-button {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgb(169, 183, 198);
+    -fx-font-family: 'Segoe UI';
+}
+
+.radio-button .radio {
+    -fx-background-color: rgb(96, 96, 96);
+}
+
+.radio-button .dot {
+    -fx-mark-highlight-color: transparent;
+    -fx-mark-color: rgb(169, 183, 198);
+}
+
+.toggle-button {
+    -fx-background-color: rgb(72, 72, 72);
+    -fx-font-size: 12px;
+    -fx-text-fill: rgb(169, 183, 198);
+    -fx-font-family: 'Segoe UI';
+    -fx-background-radius: 0;
+}
+
+.toggle-button:hover {
+    -fx-background-color: rgb(96, 96, 96);
+}
+
+.toggle-button: pressed {
+    -fx-background-color: rgb(169, 183, 198);
+    -fx-text-fill: rgb(72, 72, 72);
+}
+
+.toggle-button: selected {
+    -fx-background-color: rgb(169, 183, 198);
+    -fx-text-fill: rgb(72, 72, 72);
+}
+
+#interval-error {
+    -fx-font-size: 12px;
+    -fx-fill: rgb(212, 113, 101);
+    -fx-font-family: 'Segoe UI'
+}

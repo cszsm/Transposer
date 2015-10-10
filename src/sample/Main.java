@@ -3,18 +3,15 @@ package sample;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -44,9 +41,9 @@ public class Main extends Application {
         buttonPane.setAlignment(Pos.TOP_LEFT);
         buttonPane.setSpacing(10);
 
-        HBox radioPane = new HBox();
-        radioPane.setAlignment(Pos.TOP_LEFT);
-        radioPane.setSpacing(10);
+        HBox togglePane = new HBox();
+        togglePane.setAlignment(Pos.TOP_LEFT);
+        togglePane.setSpacing(10);
 
         Label originalLabel = new Label("Original chords:");
 
@@ -55,7 +52,7 @@ public class Main extends Application {
         Label intervalLabel = new Label("Interval:");
 
         Text intervalError = new Text();
-        intervalError.setFill(Color.FIREBRICK);
+        intervalError.setId("interval-error");
 
         TextArea originalText = new TextArea();
         originalText.setPrefColumnCount(20);
@@ -88,25 +85,22 @@ public class Main extends Application {
             }
         });
 
-        final ToggleGroup b_group = new ToggleGroup();
+        final ToggleGroup toggleGroup = new ToggleGroup();
 
-        RadioButton rb_b = new RadioButton("B");
-        rb_b.setUserData("B");
-        rb_b.setToggleGroup(b_group);
+        ToggleButton bButton = new ToggleButton("B");
+        bButton.setUserData("B");
+        bButton.setToggleGroup(toggleGroup);
 
-        RadioButton rb_h = new RadioButton("H");
-        rb_h.setUserData("H");
-        rb_h.setToggleGroup(b_group);
-        rb_h.setSelected(true);
+        ToggleButton hButton = new ToggleButton("H");
+        hButton.setUserData("H");
+        hButton.setToggleGroup(toggleGroup);
+        hButton.setSelected(true);
 
-        b_group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if(b_group.getSelectedToggle().getUserData().equals("B")) {
-                    Transposer.setH(false);
-                } else {
-                    Transposer.setH(true);
-                }
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if(toggleGroup.getSelectedToggle().getUserData().equals("B")) {
+                Transposer.setH(false);
+            } else {
+                Transposer.setH(true);
             }
         });
 
@@ -122,15 +116,17 @@ public class Main extends Application {
         settingsPane.getChildren().add(intervalLabel);
         settingsPane.getChildren().add(buttonPane);
         settingsPane.getChildren().add(intervalError);
-        settingsPane.getChildren().add(radioPane);
+        settingsPane.getChildren().add(togglePane);
 
         buttonPane.getChildren().add(intervalText);
         buttonPane.getChildren().add(button);
 
-        radioPane.getChildren().add(rb_b);
-        radioPane.getChildren().add(rb_h);
+        togglePane.getChildren().add(bButton);
+        togglePane.getChildren().add(hButton);
 
-        primaryStage.setScene(new Scene(topPane/*, 300, 275*/));
+        Scene scene = new Scene(topPane);
+        primaryStage.setScene(scene);
+        scene.getStylesheets().add(Main.class.getResource("/sample/transposer.css").toExternalForm());
         primaryStage.show();
     }
 
